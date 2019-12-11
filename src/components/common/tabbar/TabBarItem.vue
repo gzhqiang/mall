@@ -25,8 +25,8 @@ export default {
     path: String,
     fontColor: {
       type: String,
-      default: 'red',
-    },
+      default: 'red'
+    }
   },
   components: {
 
@@ -37,13 +37,13 @@ export default {
     },
     activeStyle() {
       return this.isActive ? {color: this.fontColor} : {}
-    },
+    }
   },
   methods: {
     itemClick() {
       this.$router.replace(this.path)
-    },
-  },
+    }
+  }
 }
 </script>
 

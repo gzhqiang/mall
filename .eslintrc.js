@@ -13,12 +13,14 @@ module.exports = {
     'semi': ['error', 'never'],
     'import/extensions': ['error', 'always', {
       js: 'never',
-      vue: 'never'
+      vue: 'never',
     }],
     'object-curly-spacing': ['error', 'never'],
     'arrow-parens': 'off',
+    "linebreak-style": 0,
+    "comma-dangle": ["error", "never"],
   },
   parserOptions: {
     parser: 'babel-eslint',
   },
-};
+}
