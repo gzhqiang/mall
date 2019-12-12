@@ -49,13 +49,16 @@ export default {
 
 <style lang="scss" scoped>
 .tab-bar-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   flex: 1;
   text-align: center;
   img {
     height: 24px;
     width: 24px;
-    margin-top: 2px;
-    margin-bottom: 3px;
+    // margin-top: 2px;
+    // margin-bottom: 3px;
     vertical-align: middle;
   }
   div {

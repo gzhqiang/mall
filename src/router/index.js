@@ -13,30 +13,30 @@ const Profile = () => import('@/views/profile/Profile')
 const routes = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/home'
   },
   {
     path: '/home',
-    component: Home,
+    component: Home
   },
   {
     path: '/category',
-    component: Category,
+    component: Category
   },
   {
     path: '/cart',
-    component: Cart,
+    component: Cart
   },
   {
     path: '/profile',
-    component: Profile,
-  },
+    component: Profile
+  }
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes,
+  routes
 })
 
 export default router
