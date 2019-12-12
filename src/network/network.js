@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// console.log(process.env.VUE_APP_TITLE)
 /*
 可以定义两个baseURL常量：
 baseURL = "http://123.207.32.32:8000/api/v2"
@@ -8,6 +9,7 @@ baseURL = "http://106.54.54.237:8000/api/v1"
 待会儿拉你进vip群，有什么疑问可以在里面讨论
 */
 // const baseURL = 'http://123.207.32.32:8000/api/v2'
+console.log(process.env.VUE_APP_BASE_URL)
 const baseURL = 'http://106.54.54.237:8000/api/v1'
 
 // ES6 Promise的封装
