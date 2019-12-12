@@ -29,5 +29,12 @@ module.exports = {
         prependData: '@import "~@/assets/scss/variables.scss";'
       }
     }
+  },
+  devServer: {
+    proxy: {
+      '/api/v2': {
+        target: 'http://123.207.32.32:8000'
+      }
+    }
   }
 }

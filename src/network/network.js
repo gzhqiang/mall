@@ -9,8 +9,9 @@ baseURL = "http://106.54.54.237:8000/api/v1"
 待会儿拉你进vip群，有什么疑问可以在里面讨论
 */
 // const baseURL = 'http://123.207.32.32:8000/api/v2'
-console.log(process.env.VUE_APP_BASE_URL)
-const baseURL = 'http://106.54.54.237:8000/api/v1'
+// console.log(process.env.VUE_APP_BASE_URL)
+// const baseURL = 'http://106.54.54.237:8000/api/v1'
+const baseURL = '/api/v2'
 
 // ES6 Promise的封装
 // eslint-disable-next-line import/prefer-default-export
