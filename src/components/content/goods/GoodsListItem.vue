@@ -1,8 +1,8 @@
 <template>
   <div class="goods-list-item">
     <div class="item-img">
-      <a :href="item.link">
-        <img :src="item.show.img" alt="">
+      <a :href="item.link" @click.prevent="itemClick">
+        <img :src="item.show.img" @load="imgLoad" alt="" />
       </a>
     </div>
 
@@ -18,9 +18,7 @@
 <script>
 export default {
   data() {
-    return {
-
-    }
+    return {}
   },
   props: {
     item: {
@@ -28,8 +26,16 @@ export default {
       required: true
     }
   },
-  components: {
-
+  components: {},
+  methods: {
+    imgLoad() {
+      // console.log('imgload...')
+      // console.log(this.$bus.$emit)
+      this.$bus.$emit('imgLoad')
+    },
+    itemClick() {
+      console.log('item click')
+    }
   }
 }
 </script>
@@ -70,7 +76,7 @@ export default {
     }
 
     :nth-child(2)::before {
-      content: "";
+      content: '';
       position: absolute;
       // z-index: 999;
       top: 0;
@@ -81,7 +87,5 @@ export default {
       background-size: 14px auto;
     }
   }
-
 }
-
 </style>

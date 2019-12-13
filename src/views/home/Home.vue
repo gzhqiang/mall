@@ -4,20 +4,29 @@
       <div slot="center">购物街</div>
     </nav-bar>
 
-    <back-top 
-      @click.native="backTop" 
-      v-show="isShowBackTop">
-    </back-top>
+    <tab-control
+      :tabs="['流行', '新款', '精选']"
+      @tabChanged="tabChanged"
+      ref="tabControl1"
+      class="fixed-tab-control"
+      v-show="isShowControl"
+    >
+    </tab-control>
+    <back-top @click.native="backTop" v-show="isShowBackTop"></back-top>
 
-    <scroll 
-      class="content" 
-      ref="scroll" 
+    <scroll
+      class="content"
+      ref="scroll"
       @scrollY="scrollY"
       :probeType="3"
       :pullUpLoad="true"
-      @loadMore="loadMore">
+      @loadMore="loadMore"
+    >
       <!-- 轮播图 -->
-      <home-swipe :banners="banners"></home-swipe>
+      <home-swipe
+        :banners="banners"
+        @swipeImageLoad="swipeImageLoad"
+      ></home-swipe>
       <!-- 推荐模块 -->
       <recommends-view :recommends="recommends"></recommends-view>
 
@@ -25,69 +34,30 @@
       <feature-view></feature-view>
 
       <!-- tab control -->
-      <tab-control :tabs="['流行', '新款', '精选']" @tabChanged='tabChanged'></tab-control>
+      <tab-control
+        :tabs="['流行', '新款', '精选']"
+        @tabChanged="tabChanged"
+        ref="tabControl2"
+      >
+      </tab-control>
       <goods-list :goodsList="showGoods"></goods-list>
     </scroll>
-    <!-- <div class="wrapper" ref="wrapper">
-      <ul class="content">
-        <li>商品列表1</li>
-        <li>商品列表2</li>
-        <li>商品列表3</li>
-        <li>商品列表4</li>
-        <li>商品列表5</li>
-        <li>商品列表6</li>
-        <li>商品列表7</li>
-        <li>商品列表8</li>
-        <li>商品列表9</li>
-        <li>商品列表10</li>
-        <li>商品列表11</li>
-        <li>商品列表12</li>
-        <li>商品列表13</li>
-        <li>商品列表14</li>
-        <li>商品列表15</li>
-        <li>商品列表16</li>
-        <li>商品列表17</li>
-        <li>商品列表18</li>
-        <li>商品列表19</li>
-        <li>商品列表20</li>
-        <li>商品列表21</li>
-        <li>商品列表22</li>
-        <li>商品列表23</li>
-        <li>商品列表24</li>
-        <li>商品列表25</li>
-        <li>商品列表26</li>
-        <li>商品列表27</li>
-        <li>商品列表28</li>
-        <li>商品列表29</li>
-        <li>商品列表30</li>
-        <li>商品列表31</li>
-        <li>商品列表32</li>
-        <li>商品列表33</li>
-        <li>商品列表34</li>
-        <li>商品列表35</li>
-        <li>商品列表36</li>
-        <li>商品列表37</li>
-        <li>商品列表38</li>
-        <li>商品列表39</li>
-        <li>商品列表40</li>
-      </ul>
-    </div> -->
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/common/navbar/NavBar'
 import TabControl from '@/components/content/tabcontrol/TabControl'
-import GoodsList from "@/components/content/goods/GoodsList"
+import GoodsList from '@/components/content/goods/GoodsList'
 
 import HomeSwipe from './childComps/HomeSwipe'
 import RecommendsView from './childComps/RecommendsView'
 import FeatureView from './childComps/FeatureView'
 
-import Scroll from '@/components/common/scroll/Scroll.vue'
+import Scroll from '@/components/common/scroll/Scroll'
 import BackTop from '@/components/content/backtop/BackTop'
 
-import {getMultiData, getProductData} from '@/network/home'
+import { getMultiData, getProductData } from '@/network/home'
 
 export default {
   data() {
@@ -95,9 +65,9 @@ export default {
       banners: [],
       recommends: [],
       products: {
-        pop: {page: 0, list: []},
-        new: {page: 0, list: []},
-        sell: {page: 0, list: []}
+        pop: { page: 0, list: [] },
+        new: { page: 0, list: [] },
+        sell: { page: 0, list: [] }
       },
       num2type: {
         0: 'pop',
@@ -105,7 +75,10 @@ export default {
         2: 'sell'
       },
       currentType: 'pop',
-      isShowBackTop: false
+      isShowBackTop: false,
+      tabControlOffsetTop: 0,
+      isCeilingLight: false,
+      isShowControl: false
     }
   },
   components: {
@@ -143,15 +116,38 @@ export default {
     },
     tabChanged(index) {
       this.currentType = this.num2type[index]
+      this.$refs.tabControl1.currentIndex = index
+      this.$refs.tabControl2.currentIndex = index
+      // this.$refs.tabControl1.currentIndex = this.$refs.tabControl2.currentIndex = index
     },
     backTop() {
       this.$refs.scroll.backTop(0, 0)
     },
-    scrollY(posY) {
-      this.isShowBackTop = -posY > 1000
+    scrollY(y) {
+      const posY = Math.abs(y)
+      this.isShowBackTop = posY > 1000
+      this.isShowControl = posY >= this.tabControlOffsetTop
     },
     loadMore() {
-      this.getProductData(this.currentType, this.products[this.currentType].page)
+      this.getProductData(
+        this.currentType,
+        this.products[this.currentType].page
+      )
+    },
+    swipeImageLoad() {
+      // console.log('轮播图加载完成')
+      this.tabControlOffsetTop = this.$refs.tabControl2.$el.offsetTop
+      console.log(this.tabControlOffsetTop)
+    },
+    // 去除抖动 && 频繁刷新
+    debounce(func, delay = 200) {
+      let timer = null
+      return () => {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+          func()
+        }, delay)
+      }
     }
   },
   created() {
@@ -164,14 +160,41 @@ export default {
       this.getProductData('new', page+1)
       this.getProductData('sell', page+1)
     */
-    for (const type in this.products) {
+    /*   for (const type in this.products) {
       this.getProductData(type, this.products[type].page + 1)
-    }
+    } */
+    // for (const [type, product] of Object.entries(this.products)) {
+    //   console.log(type, product)
+    //   this.getProductData(type, product.page + 1)
+    // }
+
+    // for (const type of Object.keys(this.products)) {
+    //   this.getProductData(type, this.products[type].page + 1)
+    // }
+    // console.log(Object.entries(this.products), type(Object.entries(this.products)))
+    Object.entries(this.products).forEach(item => {
+      // 数组解构
+      const [type, product] = item
+      this.getProductData(type, product.page + 1)
+    })
     // this.goodsList = this.products.pop.list
+    // console.log(typeof Object.keys(this.products))
+    // console.log(Object.keys(this.products))
   },
   mounted() {
+    // this.imgLoadFun(,)
+    const refresh = this.debounce(this.$refs.scroll.refresh)
+    this.$bus.$on('imgLoad', () => {
+      refresh()
+      // this.$refs.scroll.refresh()
+    })
+  },
+  activated() {
+    console.log('activated')
+  },
+  deactivated() {
+    console.log('deactivated')
   }
-  
 }
 </script>
 
@@ -197,5 +220,10 @@ export default {
   color: #fff;
 }
 
-
+.fixed-tab-control {
+  position: fixed;
+  top: 44px;
+  left: 0;
+  right: 0;
+}
 </style>

@@ -42,7 +42,7 @@ export default {
 }
 
 .tab-control {
-  position: sticky;
+  // position: sticky;
   top: 44px;
   z-index: 999;
   display: flex;

@@ -1,17 +1,20 @@
 <template>
   <div class="goods">
-    <goods-list-item class="goods-item" v-for="item in goodsList" :key="item.iid" :item="item" />
+    <goods-list-item
+      class="goods-item"
+      v-for="(item,index) in goodsList"
+      :key="index"
+      :item="item"
+    />
   </div>
 </template>
 
 <script>
-import GoodsListItem from "./GoodsListItem"
+import GoodsListItem from './GoodsListItem'
 
 export default {
   data() {
-    return {
-
-    }
+    return {}
   },
   props: {
     goodsList: {
@@ -28,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.goods{
+.goods {
   display: flex;
   // flex: 45%;
   // width: 45%;
@@ -39,5 +42,4 @@ export default {
     width: 48%;
   }
 }
-
 </style>

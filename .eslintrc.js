@@ -15,7 +15,7 @@ module.exports = {
       js: 'never',
       vue: 'never',
     }],
-    'object-curly-spacing': ['error', 'never'],
+    // 'object-curly-spacing': ['error', 'never'],
     'arrow-parens': 'off',
     "linebreak-style": 0,
     "comma-dangle": ["error", "never"],

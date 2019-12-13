@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BScroll from "better-scroll"
+import BScroll from 'better-scroll'
 
 export default {
   data() {
@@ -25,15 +25,17 @@ export default {
       default: false
     }
   },
-  components: {
-
-  },
+  components: {},
   methods: {
-    backTop(x, y, time=300) {
-      this.scroll.scrollTo(x, y, time)
+    backTop(x, y, time = 300) {
+      this.scroll && this.scroll.scrollTo(x, y, time)
     },
     finishPullUp() {
-      this.scroll.finishPullUp()
+      this.scroll && this.scroll.finishPullUp()
+    },
+    refresh() {
+      console.log('-----')
+      this.scroll && this.scroll.refresh()
     }
   },
   mounted() {
@@ -46,8 +48,10 @@ export default {
       bounce: false
     })
 
+    console.log(this.scroll)
+
     this.scroll.on('pullingUp', () => {
-      console.log('上拉加载更多');
+      console.log('上拉加载更多')
       // 发送网络请求, 请求更多页的数据
       this.$emit('loadMore')
     })
@@ -60,5 +64,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
