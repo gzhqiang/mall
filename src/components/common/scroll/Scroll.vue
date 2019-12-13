@@ -37,6 +37,7 @@ export default {
     }
   },
   mounted() {
+    // console.log('this.$props', this.$props)
     this.scroll = new BScroll(this.$refs.wrapper, {
       probeType: this.probeType,
       click: true,
