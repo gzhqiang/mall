@@ -98,21 +98,12 @@ export default {
     border-bottom: 2px solid #eee;
     font-size: 12px;
     color: #999;
-    // div {
-    //   flex: 1;
-    // }
-    // div:nth-child(2) {
-    //   text-align: center;
-    // }
-    // div:last-child {
-    //   text-align: right;
-    // }
   }
 
   .services {
     padding: 10px;
     display: flex;
-    font-size: 13px;
+    font-size: 12px;
     color: #333;
     justify-content: space-between;
     flex-wrap: wrap;

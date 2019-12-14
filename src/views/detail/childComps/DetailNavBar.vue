@@ -10,6 +10,7 @@
           :class="{ active: currentIndex === index }"
           v-for="(item, index) in items"
           :key="index"
+          @click="itemClick(index)"
         >
           {{ item }}
         </div>
@@ -33,6 +34,10 @@ export default {
       default() {
         return []
       }
+    },
+    itemIndex: {
+      type: Number,
+      default: 0
     }
   },
   components: {
@@ -41,6 +46,15 @@ export default {
   methods: {
     backClick() {
       this.$router.go(-1)
+    },
+    itemClick(index) {
+      this.currentIndex = index
+      this.$emit('changeItem', index)
+    }
+  },
+  watch: {
+    itemIndex() {
+      this.currentIndex = this.itemIndex
     }
   }
 }
