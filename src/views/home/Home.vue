@@ -78,7 +78,8 @@ export default {
       isShowBackTop: false,
       tabControlOffsetTop: 0,
       isCeilingLight: false,
-      isShowControl: false
+      isShowControl: false,
+      currentOffsetY: 0
     }
   },
   components: {
@@ -121,7 +122,7 @@ export default {
       // this.$refs.tabControl1.currentIndex = this.$refs.tabControl2.currentIndex = index
     },
     backTop() {
-      this.$refs.scroll.backTop(0, 0)
+      this.$refs.scroll.backTo(0, 0)
     },
     scrollY(y) {
       const posY = Math.abs(y)
@@ -137,7 +138,7 @@ export default {
     swipeImageLoad() {
       // console.log('轮播图加载完成')
       this.tabControlOffsetTop = this.$refs.tabControl2.$el.offsetTop
-      console.log(this.tabControlOffsetTop)
+      // console.log(this.tabControlOffsetTop)
     },
     // 去除抖动 && 频繁刷新
     debounce(func, delay = 200) {
@@ -190,10 +191,16 @@ export default {
     })
   },
   activated() {
-    console.log('activated')
+    // 新版better-scroll好像没有bug, 但是我这里也再做下，避免出现问题。
+    // console.log('activated')
+    // this.$refs.scroll.sc
+    console.log(this.currentOffsetY)
+    this.$refs.scroll.backTo(0, this.currentOffsetY, 0)
   },
   deactivated() {
     console.log('deactivated')
+    // 记住当前位置
+    this.currentOffsetY = this.$refs.scroll.scroll.y
   }
 }
 </script>

@@ -19,6 +19,7 @@ module.exports = {
     'arrow-parens': 'off',
     "linebreak-style": 0,
     "comma-dangle": ["error", "never"],
+    "no-unused-expressions": 'off'
   },
   parserOptions: {
     parser: 'babel-eslint',

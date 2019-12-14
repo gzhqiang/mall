@@ -18,8 +18,7 @@
 export default {
   name: 'tab-bar-item',
   data() {
-    return {
-    }
+    return {}
   },
   props: {
     path: String,
@@ -28,15 +27,13 @@ export default {
       default: 'red'
     }
   },
-  components: {
-
-  },
+  components: {},
   computed: {
     isActive() {
       return this.$route.path.indexOf(this.path) !== -1
     },
     activeStyle() {
-      return this.isActive ? {color: this.fontColor} : {}
+      return this.isActive ? { color: this.fontColor } : {}
     }
   },
   methods: {

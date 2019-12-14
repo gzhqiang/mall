@@ -34,7 +34,8 @@ export default {
       this.$bus.$emit('imgLoad')
     },
     itemClick() {
-      console.log('item click')
+      // 跳转到商品详情页面
+      this.$router.push(`/detail/${this.item.iid}`)
     }
   }
 }

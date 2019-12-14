@@ -27,7 +27,7 @@ export default {
   },
   components: {},
   methods: {
-    backTop(x, y, time = 300) {
+    backTo(x, y, time = 300) {
       this.scroll && this.scroll.scrollTo(x, y, time)
     },
     finishPullUp() {
@@ -47,9 +47,6 @@ export default {
       startY: 0,
       bounce: false
     })
-
-    console.log(this.scroll)
-
     this.scroll.on('pullingUp', () => {
       console.log('上拉加载更多')
       // 发送网络请求, 请求更多页的数据
