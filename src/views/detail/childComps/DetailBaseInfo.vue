@@ -110,19 +110,18 @@ export default {
   }
 
   .services {
-    height: 61px;
-    line-height: 61px;
+    padding: 10px;
     display: flex;
     font-size: 13px;
     color: #333;
-    // div {
-    //   flex: 1;
-    // }
     justify-content: space-between;
+    flex-wrap: wrap;
     div:last-child {
       text-align: right;
     }
     .service-item {
+      height: 20px;
+      line-height: 20px;
       img {
         width: 14px;
         height: 14px;

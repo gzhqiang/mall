@@ -47,6 +47,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.nav-bar {
+  background-color: #fff;
+}
 .nav-bar-left {
   text-align: center;
   img {

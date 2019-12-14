@@ -1,8 +1,9 @@
 <template>
   <div class="goods-list-item">
     <div class="item-img">
-      <a :href="item.link" @click.prevent="itemClick">
-        <img :src="item.show.img" @load="imgLoad" alt="" />
+      <a href="javascript:;" @click.prevent="itemClick">
+        <img v-if="item.image" :src="item.image" @load="imgLoad" alt="" />
+        <img v-else :src="item.show.img" @load="imgLoad" alt="" />
       </a>
     </div>
 

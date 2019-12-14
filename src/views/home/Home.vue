@@ -58,6 +58,7 @@ import Scroll from '@/components/common/scroll/Scroll'
 import BackTop from '@/components/content/backtop/BackTop'
 
 import { getMultiData, getProductData } from '@/network/home'
+import { debounce } from '@/common/utils.js'
 
 export default {
   data() {
@@ -139,16 +140,6 @@ export default {
       // console.log('轮播图加载完成')
       this.tabControlOffsetTop = this.$refs.tabControl2.$el.offsetTop
       // console.log(this.tabControlOffsetTop)
-    },
-    // 去除抖动 && 频繁刷新
-    debounce(func, delay = 200) {
-      let timer = null
-      return () => {
-        if (timer) clearTimeout(timer)
-        timer = setTimeout(() => {
-          func()
-        }, delay)
-      }
     }
   },
   created() {
@@ -184,7 +175,7 @@ export default {
   },
   mounted() {
     // this.imgLoadFun(,)
-    const refresh = this.debounce(this.$refs.scroll.refresh)
+    const refresh = debounce(this.$refs.scroll.refresh)
     this.$bus.$on('imgLoad', () => {
       refresh()
       // this.$refs.scroll.refresh()

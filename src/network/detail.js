@@ -12,6 +12,12 @@ export function getGoodsDetail(iid) {
   })
 }
 
+export function getRecommendGoods() {
+  return request({
+    url: '/recommend'
+  })
+}
+
 export class GoodsBaseInfo {
   constructor(itemInfo, columns, services) {
     this.itemTitle = itemInfo.title
@@ -30,5 +36,12 @@ export class Shop {
     this.sells = shopInfo.cSells
     this.goodsNumber = shopInfo.cGoods
     this.score = shopInfo.score
+  }
+}
+
+export class Params {
+  constructor(itemParams) {
+    this.rule = itemParams.rule
+    this.info = itemParams.info
   }
 }

@@ -34,7 +34,7 @@ export default {
       this.scroll && this.scroll.finishPullUp()
     },
     refresh() {
-      console.log('-----')
+      // console.log('-----111')
       this.scroll && this.scroll.refresh()
     }
   },
