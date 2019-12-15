@@ -7,7 +7,7 @@
     ></detail-nav-bar>
 
     <back-top @click.native="backTop" v-show="isShowBackTop"></back-top>
-    <detail-bottom-bar></detail-bottom-bar>
+    <detail-bottom-bar @addToCart="addToCart" />
 
     <scroll
       class="content"
@@ -60,6 +60,8 @@ import {
   Params
 } from '@/network/detail'
 import { itemImageLoadMixin, backTopMixin } from '@/common/mixins'
+
+import { ADD_TO_CART } from '@/store/mutation_types'
 
 export default {
   name: 'Detail',
@@ -147,6 +149,8 @@ export default {
     },
     scrollContent(y) {
       const posY = Math.abs(y)
+
+      // 重构
       for (let i = 0; i < this.offsetTops.length - 1; i += 1) {
         if (
           this.navBarIndex !== i &&
@@ -172,8 +176,20 @@ export default {
       // }
       this.$refs.navBar.currentIndex = this.navBarIndex
       this.isShowBackTop = posY > 1000
+    },
+    addToCart() {
+      /**
+       * 取出需要的信息保存到vuex
+       */
+      const product = {}
+      product.id = this.$route.params.id
+      product.image = this.topImages[0]
+      product.price = this.goodsBaseInfo.price
+      product.title = this.goodsBaseInfo.itemTitle
+      product.desc = this.goodsBaseInfo.desc
 
-      // 重构
+      // 保存到vuex
+      this.$store.dispatch(ADD_TO_CART, product)
     }
   }
 }
