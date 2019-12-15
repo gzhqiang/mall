@@ -17,7 +17,7 @@
     <scroll
       class="content"
       ref="scroll"
-      @scrollY="scrollY"
+      @scrollY="scrollContent"
       :probeType="3"
       :pullUpLoad="true"
       @loadMore="loadMore"
@@ -55,11 +55,10 @@ import RecommendsView from './childComps/RecommendsView'
 import FeatureView from './childComps/FeatureView'
 
 import Scroll from '@/components/common/scroll/Scroll'
-import BackTop from '@/components/content/backtop/BackTop'
 
 import { getMultiData, getProductData } from '@/network/home'
 // import { debounce } from '@/common/utils'
-import { itemImageLoadMixin } from '@/common/mixins'
+import { itemImageLoadMixin, backTopMixin } from '@/common/mixins'
 
 export default {
   name: 'Home',
@@ -85,7 +84,7 @@ export default {
       currentOffsetY: 0
     }
   },
-  mixins: [itemImageLoadMixin],
+  mixins: [itemImageLoadMixin, backTopMixin],
   components: {
     NavBar,
     HomeSwipe,
@@ -93,8 +92,7 @@ export default {
     FeatureView,
     TabControl,
     GoodsList,
-    Scroll,
-    BackTop
+    Scroll
   },
   computed: {
     showGoods() {
@@ -125,10 +123,7 @@ export default {
       this.$refs.tabControl2.currentIndex = index
       // this.$refs.tabControl1.currentIndex = this.$refs.tabControl2.currentIndex = index
     },
-    backTop() {
-      this.$refs.scroll.backTo(0, 0)
-    },
-    scrollY(y) {
+    scrollContent(y) {
       const posY = Math.abs(y)
       this.isShowBackTop = posY > 1000
       this.isShowControl = posY >= this.tabControlOffsetTop
@@ -175,6 +170,7 @@ export default {
     // this.goodsList = this.products.pop.list
     // console.log(typeof Object.keys(this.products))
     // console.log(Object.keys(this.products))
+    // this.$refs.scroll.refresh()
   },
   mounted() {
     // this.imgLoadFun(,)
@@ -182,7 +178,8 @@ export default {
     // this.$bus.$on('imgLoad', () => {
     //   refresh()
     // })
-    console.log('hahah')
+    // console.log('hahah')
+    this.$refs.scroll.refresh()
   },
   activated() {
     // 新版better-scroll好像没有bug, 但是我这里也再做下，避免出现问题。

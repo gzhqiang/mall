@@ -32,10 +32,6 @@ export default {
       default() {
         return []
       }
-    },
-    itemIndex: {
-      type: Number,
-      default: 0
     }
   },
   components: {
@@ -48,11 +44,6 @@ export default {
     itemClick(index) {
       this.currentIndex = index
       this.$emit('changeItem', index)
-    }
-  },
-  watch: {
-    itemIndex() {
-      this.currentIndex = this.itemIndex
     }
   }
 }

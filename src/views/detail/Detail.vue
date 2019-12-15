@@ -4,8 +4,10 @@
       :items="['商品', '参数', '评价', '推荐']"
       @changeItem="changeItem"
       ref="navBar"
-      :itemIndex="navBarIndex"
     ></detail-nav-bar>
+
+    <back-top @click.native="backTop" v-show="isShowBackTop"></back-top>
+    <detail-bottom-bar></detail-bottom-bar>
 
     <scroll
       class="content"
@@ -48,6 +50,7 @@ import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParams from './childComps/DetailParams'
 import DetailComment from './childComps/DetailComment'
+import DetailBottomBar from './childComps/DetailBottomBar'
 
 import {
   getGoodsDetail,
@@ -56,7 +59,7 @@ import {
   Shop,
   Params
 } from '@/network/detail'
-import { itemImageLoadMixin } from '@/common/mixins'
+import { itemImageLoadMixin, backTopMixin } from '@/common/mixins'
 
 export default {
   name: 'Detail',
@@ -70,13 +73,12 @@ export default {
       recommends: [],
       comments: {},
       counter: 0,
-      offsetTop: {
-        0: 0
-      },
-      navBarIndex: 0
+      offsetTops: [],
+      navBarIndex: 0,
+      isShowBackTop: false
     }
   },
-  mixins: [itemImageLoadMixin],
+  mixins: [itemImageLoadMixin, backTopMixin],
   components: {
     DetailNavBar,
     DetailSwipe,
@@ -86,7 +88,8 @@ export default {
     DetailGoodsInfo,
     DetailParams,
     GoodsList,
-    DetailComment
+    DetailComment,
+    DetailBottomBar
   },
   created() {
     const goodsId = this.$route.params.id
@@ -110,6 +113,7 @@ export default {
     })
   },
   mounted() {
+    this.$refs.scroll.refresh()
     // const refresh = debounce(this.$refs.scroll.refresh)
     this.$bus.$on('detailImgLoad', () => {
       this.counter += 1
@@ -125,27 +129,51 @@ export default {
         this.detailInfo &&
         this.counter === this.detailInfo.detailImage[0].list.length
       ) {
-        this.offsetTop['1'] = this.$refs.params.$el.offsetTop
-        this.offsetTop['2'] = this.$refs.comment.$el.offsetTop
-        this.offsetTop['3'] = this.$refs.recommend.$el.offsetTop
+        this.offsetTops = []
+        this.offsetTops.push(0)
+        this.offsetTops.push(this.$refs.params.$el.offsetTop)
+        this.offsetTops.push(this.$refs.comment.$el.offsetTop)
+        this.offsetTops.push(this.$refs.recommend.$el.offsetTop)
+        this.offsetTops.push(Number.MAX_VALUE)
+        // this.offsetTop['1'] = this.$refs.params.$el.offsetTop
+        // this.offsetTop['2'] = this.$refs.comment.$el.offsetTop
+        // this.offsetTop['3'] = this.$refs.recommend.$el.offsetTop
       }
     }
   },
   methods: {
     changeItem(index) {
-      this.$refs.scroll.backTo(0, -this.offsetTop[index])
+      this.$refs.scroll.backTo(0, -this.offsetTops[index])
     },
     scrollContent(y) {
       const posY = Math.abs(y)
-      if (posY >= this.offsetTop[3]) {
-        this.navBarIndex = 3
-      } else if (posY >= this.offsetTop[2]) {
-        this.navBarIndex = 2
-      } else if (posY >= this.offsetTop[1]) {
-        this.navBarIndex = 1
-      } else {
-        this.navBarIndex = 0
+      for (let i = 0; i < this.offsetTops.length - 1; i += 1) {
+        if (
+          this.navBarIndex !== i &&
+          posY >= this.offsetTops[i] &&
+          posY <= this.offsetTops[i + 1]
+        ) {
+          this.navBarIndex = i
+        }
       }
+      // this.offsetTops.forEach((offsetTop, index) => {
+      //   if (posY >=) {
+
+      //   }
+      // })
+      // if (posY >= this.offsetTop[3]) {
+      //   this.navBarIndex = 3
+      // } else if (posY >= this.offsetTop[2]) {
+      //   this.navBarIndex = 2
+      // } else if (posY >= this.offsetTop[1]) {
+      //   this.navBarIndex = 1
+      // } else {
+      //   this.navBarIndex = 0
+      // }
+      this.$refs.navBar.currentIndex = this.navBarIndex
+      this.isShowBackTop = posY > 1000
+
+      // 重构
     }
   }
 }
@@ -158,7 +186,8 @@ export default {
   z-index: 999;
   background-color: #fff;
   .content {
-    height: calc(100% - 44px);
+    height: calc(100% - 44px - 59px);
+    // overflow: hidden;
     // overflow: hidden;
   }
 }
