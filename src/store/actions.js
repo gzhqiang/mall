@@ -12,7 +12,21 @@ export default {
     } else {
       // eslint-disable-next-line no-param-reassign
       payload.count = 1
+      // eslint-disable-next-line no-param-reassign
+      payload.checked = true
       commit('addProduct', payload)
     }
+  },
+  updateProduct({ commit }, checked) {
+    commit('updateProduct', checked)
+  },
+  updateProductById({ state, commit }, payload) {
+    const product = state.cartListProduct.find(
+      item => item.id === payload.id
+    )
+    const index = state.cartListProduct.indexOf(product)
+    // eslint-disable-next-line no-param-reassign
+    payload.index = index
+    commit('updateProductById', payload)
   }
 }
