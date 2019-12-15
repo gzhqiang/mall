@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.van-swipe-item {
+.van-swipe {
   margin-top: 44px;
   img {
     width: 100%;

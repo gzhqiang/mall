@@ -58,9 +58,11 @@ import Scroll from '@/components/common/scroll/Scroll'
 import BackTop from '@/components/content/backtop/BackTop'
 
 import { getMultiData, getProductData } from '@/network/home'
-import { debounce } from '@/common/utils.js'
+// import { debounce } from '@/common/utils'
+import { itemImageLoadMixin } from '@/common/mixins'
 
 export default {
+  name: 'Home',
   data() {
     return {
       banners: [],
@@ -83,6 +85,7 @@ export default {
       currentOffsetY: 0
     }
   },
+  mixins: [itemImageLoadMixin],
   components: {
     NavBar,
     HomeSwipe,
@@ -175,23 +178,22 @@ export default {
   },
   mounted() {
     // this.imgLoadFun(,)
-    const refresh = debounce(this.$refs.scroll.refresh)
-    this.$bus.$on('imgLoad', () => {
-      refresh()
-      // this.$refs.scroll.refresh()
-    })
+    // const refresh = debounce(this.$refs.scroll.refresh)
+    // this.$bus.$on('imgLoad', () => {
+    //   refresh()
+    // })
+    console.log('hahah')
   },
   activated() {
     // 新版better-scroll好像没有bug, 但是我这里也再做下，避免出现问题。
-    // console.log('activated')
-    // this.$refs.scroll.sc
-    console.log(this.currentOffsetY)
-    this.$refs.scroll.backTo(0, this.currentOffsetY, 0)
+    this.$refs.scroll.backTo(0, this.currentOffsetY, 1)
+    this.$refs.scroll.refresh()
   },
   deactivated() {
-    console.log('deactivated')
     // 记住当前位置
     this.currentOffsetY = this.$refs.scroll.scroll.y
+    // console.log(this.currentOffsetY)
+    this.$bus.$off('imgLoad', this.itemImgListener)
   }
 }
 </script>

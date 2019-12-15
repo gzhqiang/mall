@@ -56,7 +56,7 @@ import {
   Shop,
   Params
 } from '@/network/detail'
-import { debounce } from '@/common/utils'
+import { itemImageLoadMixin } from '@/common/mixins'
 
 export default {
   name: 'Detail',
@@ -76,6 +76,7 @@ export default {
       navBarIndex: 0
     }
   },
+  mixins: [itemImageLoadMixin],
   components: {
     DetailNavBar,
     DetailSwipe,
@@ -109,12 +110,14 @@ export default {
     })
   },
   mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh)
+    // const refresh = debounce(this.$refs.scroll.refresh)
     this.$bus.$on('detailImgLoad', () => {
-      this.counter++
-      refresh()
-      // this.$refs.scroll.refresh()
+      this.counter += 1
+      this.refresh()
     })
+  },
+  destroyed() {
+    this.$bus.$off('imgLoad', this.itemImgListener)
   },
   watch: {
     counter() {
@@ -130,8 +133,7 @@ export default {
   },
   methods: {
     changeItem(index) {
-      const navBarHeight = this.$refs.navBar.$el.children[0].offsetHeight
-      this.$refs.scroll.backTo(0, -(this.offsetTop[index] - navBarHeight))
+      this.$refs.scroll.backTo(0, -this.offsetTop[index])
     },
     scrollContent(y) {
       const posY = Math.abs(y)
