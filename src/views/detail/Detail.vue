@@ -6,6 +6,8 @@
       ref="navBar"
     ></detail-nav-bar>
 
+    <toast :isShow="isShow" />
+
     <back-top @click.native="backTop" v-show="isShowBackTop"></back-top>
     <detail-bottom-bar @addToCart="addToCart" />
 
@@ -40,6 +42,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import Scroll from '@/components/common/scroll/Scroll'
 import GoodsList from '@/components/content/goods/GoodsList'
 
@@ -51,6 +55,7 @@ import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParams from './childComps/DetailParams'
 import DetailComment from './childComps/DetailComment'
 import DetailBottomBar from './childComps/DetailBottomBar'
+import Toast from '@/components/common/toast/Toast'
 
 import {
   getGoodsDetail,
@@ -77,7 +82,8 @@ export default {
       counter: 0,
       offsetTops: [],
       navBarIndex: 0,
-      isShowBackTop: false
+      isShowBackTop: false,
+      isShow: false
     }
   },
   mixins: [itemImageLoadMixin, backTopMixin],
@@ -91,7 +97,8 @@ export default {
     DetailParams,
     GoodsList,
     DetailComment,
-    DetailBottomBar
+    DetailBottomBar,
+    Toast
   },
   created() {
     const goodsId = this.$route.params.id
@@ -137,20 +144,19 @@ export default {
         this.offsetTops.push(this.$refs.comment.$el.offsetTop)
         this.offsetTops.push(this.$refs.recommend.$el.offsetTop)
         this.offsetTops.push(Number.MAX_VALUE)
-        // this.offsetTop['1'] = this.$refs.params.$el.offsetTop
-        // this.offsetTop['2'] = this.$refs.comment.$el.offsetTop
-        // this.offsetTop['3'] = this.$refs.recommend.$el.offsetTop
       }
     }
   },
   methods: {
+    ...mapActions({
+      addCart: ADD_TO_CART
+    }),
     changeItem(index) {
       this.$refs.scroll.backTo(0, -this.offsetTops[index])
     },
     scrollContent(y) {
       const posY = Math.abs(y)
 
-      // 重构
       for (let i = 0; i < this.offsetTops.length - 1; i += 1) {
         if (
           this.navBarIndex !== i &&
@@ -160,20 +166,6 @@ export default {
           this.navBarIndex = i
         }
       }
-      // this.offsetTops.forEach((offsetTop, index) => {
-      //   if (posY >=) {
-
-      //   }
-      // })
-      // if (posY >= this.offsetTop[3]) {
-      //   this.navBarIndex = 3
-      // } else if (posY >= this.offsetTop[2]) {
-      //   this.navBarIndex = 2
-      // } else if (posY >= this.offsetTop[1]) {
-      //   this.navBarIndex = 1
-      // } else {
-      //   this.navBarIndex = 0
-      // }
       this.$refs.navBar.currentIndex = this.navBarIndex
       this.isShowBackTop = posY > 1000
     },
@@ -182,14 +174,21 @@ export default {
        * 取出需要的信息保存到vuex
        */
       const product = {}
-      product.id = this.$route.params.id
-      product.image = this.topImages[0]
+      product.id = this.$route.params.id;
+      // product.image = this.topImages[0]
+      [product.image] = this.topImages
       product.price = this.goodsBaseInfo.price
       product.title = this.goodsBaseInfo.itemTitle
       product.desc = this.goodsBaseInfo.desc
 
       // 保存到vuex
-      this.$store.dispatch(ADD_TO_CART, product)
+      this.addCart(product).then(msg => {
+        console.log(msg)
+        this.isShow = true
+        setTimeout(() => {
+          this.isShow = false
+        }, 2000)
+      })
     }
   }
 }
@@ -203,8 +202,6 @@ export default {
   background-color: #fff;
   .content {
     height: calc(100% - 44px - 59px);
-    // overflow: hidden;
-    // overflow: hidden;
   }
 }
 </style>

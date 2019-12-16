@@ -24,8 +24,7 @@ import CheckedButton from './CheckedButton'
 export default {
   name: 'CartBottomBar',
   data() {
-    return {
-    }
+    return {}
   },
   components: {
     CheckedButton
@@ -41,14 +40,14 @@ export default {
     checkedAll() {
       if (this.cartListLength === 0) {
         return false
-      } else {
-        const haveNoChcked = this.cartList.some(item => {
-          if (!item.checked) {
-            return true
-          }
-        })
-        return !haveNoChcked
       }
+      const haveNoChcked = this.cartList.some(item => {
+        if (!item.checked) {
+          return true
+        }
+        return false
+      })
+      return !haveNoChcked
     }
   },
   methods: {

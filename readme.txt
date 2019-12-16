@@ -19,3 +19,10 @@ todolist:
   复杂条件判断的优化
 
   商品添加到购物车 vuex -> state mutations actions 记得分文件编写
+
+Promise
+vuex:
+  mapGetters
+  mapActions
+toast封装
+  插件方式封装

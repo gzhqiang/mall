@@ -1,8 +1,8 @@
 <template>
   <div class="cart-list">
-    <cart-list-item 
-      v-for="(item, index) in cartList" 
-      :key="index" 
+    <cart-list-item
+      v-for="(item, index) in cartList"
+      :key="index"
       :cartItem="item"
     />
   </div>
